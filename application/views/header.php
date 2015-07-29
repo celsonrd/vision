@@ -16,6 +16,9 @@
 
 	<!-- DataTables CSS -->
 	<link rel="stylesheet" type="text/css" href="<? echo base_url('public/dataTable/media/css/jquery.dataTables.css') ?>">
+
+	<!-- DataTables CSS -->
+	<link rel="stylesheet" type="text/css" href="<? echo base_url('public/css/custom.css') ?>">
   
 	<!-- jQuery -->
 	<script type="text/javascript" src="<? echo base_url('public/dataTable/media/css/jquery.dataTables.css') ?>"></script>

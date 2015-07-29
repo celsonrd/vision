@@ -9,8 +9,6 @@ class M_militar extends CI_Model {
     public function salvarMilitar($dadosFormulario){
 
 
-
-
     	// Inserir dados na table militar
     	// ainda sem tratamento para os dados de outras tables
     	$this->db->set('id_graduacao',$dadosFormulario['id_graduacao']);
@@ -19,7 +17,7 @@ class M_militar extends CI_Model {
         $this->db->set('id_especialidade',$dadosFormulario['id_especialidade']);
         
         //Criar formulário para upload da foto
-        //$this->db->set('foto',"default.png");
+        $this->db->set('foto',"default.png");
         $this->db->set('id_usuario',$this->session->userdata('id_usuario'));
         //$this->db->set('id_om',$dadosFormulario['om']);
     	//$this->db->set('id_referenciacao',$dadosFormulario['referenciacao']);
@@ -53,7 +51,7 @@ class M_militar extends CI_Model {
     	//$this->db->set('id_om',$dadosFormulario['om']);
         //$this->db->set('data_inicio',$dadosFormulario['data_incorporacao']);
     	//$this->db->set('data_fim',$dadosFormulario['data_fim']);
-    	//$this->db->set('documento',$dadosFormulario['bol_incorporacao']);
+       	//$this->db->set('documento',$dadosFormulario['bol_incorporacao']);
     	//$this->db->insert('alteracao');
 
         // Flag para verificar se o militar foi inserido
@@ -129,14 +127,14 @@ class M_militar extends CI_Model {
         $alteracaoIndividual['informacaoDoMilitar'] = $this->db->get()->row();
 
 
-        $this->db->select('alteracao.data_inicial,alteracao.data_final,alteracao.boletim,om.nome AS nome_da_om');
+        /*$this->db->select('alteracao.data_inicial,alteracao.data_final,alteracao.boletim,om.nome AS nome_da_om');
         $this->db->from('alteracao');
         $this->db->where('id_militar',$id_militar);
         $this->db->join('om', 'om.id_om = alteracao.id_om','inner');
-        //$this->db->join('eis', 'eis.id_eis = alteracao.id_eis','inner');
-        //$this->db->join('alteracao', 'alteracao.id_militar = militar.id_militar','inner');
-        //$this->db->join('om', 'om.id_om = alteracao.id_om','inner');
-
+        $this->db->join('eis', 'eis.id_eis = alteracao.id_eis','inner');
+        $this->db->join('alteracao', 'alteracao.id_militar = militar.id_militar','inner');
+        $this->db->join('om', 'om.id_om = alteracao.id_om','inner');
+        */
 
         // Cria indice do array com as informações das alterações
         //$alteracaoIndividual['informacaoDaAlteracao'] = $this->db->get()->result();
@@ -169,6 +167,24 @@ class M_militar extends CI_Model {
         
 
         return $alteracaoIndividual;
+
+    }
+
+    public function salvarAlteracao($id_militar){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 

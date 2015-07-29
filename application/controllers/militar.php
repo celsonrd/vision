@@ -238,19 +238,12 @@ class Militar extends CI_Controller {
 		}
 
 
-		$dados = $this->m_militar->exibirAlteracao($id_militar);
-
+		$dados['militar'] 		= $this->m_militar->exibirAlteracao($id_militar);
+		$dados['tipoAlteracao'] = $this->m_tipo_alteracao->getTipoAlteracao();
+		$dados['om']			= $this->m_om->getOm();
 
 		// Converter o objeto recebido pela consulta do banco no array para manipulação
 		//$dataIncorporacao = get_object_vars($dados['dataIncorporacao']);
-
-
-		// Criar objeto para a data de incorporação que esta no banco ($dados['dataIncorporacao'])
-		$objDataIncorporacao = new DateTime();
-
-
-
-	
 		
 		
     	// Envia os dados recebido do model m_posto para a view
@@ -259,5 +252,26 @@ class Militar extends CI_Controller {
 
 	}
 
+	public function salvarAlteracao(){
+
+		$dadosAlteracao = array(
+		"id_miltiar"		=> $this->input->post("id_militar"),
+		"id_tipo_alteracao"	=> $this->input->post("tipo_alteracao"),
+		"id_om" 			=> $this->input->post("om"),
+		"documento" 		=> $this->input->post("documento"),
+		"data_inicial" 		=> $this->input->post("data_incio"),
+		"observacao" 		=> $this->input->post("observacao"),
+		);
+
+		$dadosAlteracao['data_inicial'] = strtotime(implode("-",array_reverse(explode("/", $dadosAlteracao['data_inicial']))));
+		var_dump($dadosAlteracao);
+
+
+
+
+
+
+
+	}
 
 }

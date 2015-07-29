@@ -8,7 +8,7 @@ class M_om extends CI_Model {
 
     public function getOm(){
 
-    	$this->db->order_by('nome_om','asc');
+    	$this->db->order_by('nome','asc');
     	
     	$query = $this->db->get('om');
 

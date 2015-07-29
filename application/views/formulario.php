@@ -4,7 +4,7 @@
   </div>  
 </div>
 
-<form class="form-horizontal"  action="<?php echo base_url('index.php');?>/militar/processarDadosDoMilitar" method="post">
+<form class="form-horizontal" action="<?php echo base_url('index.php');?>/militar/processarDadosDoMilitar" method="post">
 <fieldset>
 
 <!-- Form Name -->
