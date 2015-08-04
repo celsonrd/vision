@@ -37,7 +37,7 @@ class M_militar extends CI_Model {
 
 
         // Flag para verificar se o militar foi inserido
-        $insertMilitar = $this->db->affected_rows();
+        return $insertMilitar = $this->db->affected_rows();
         //die();
 
     	// Insert na table alteracao
@@ -58,12 +58,12 @@ class M_militar extends CI_Model {
         //$insertAlteracao = $this->db->affected_rows();
 
 
-        // Verificação se os dados foram inseridos com sucesso
+        /* Verificação se os dados foram inseridos com sucesso
         if ($insertMilitar) {
             return "Miliar Registrado!";
         } else{
             return "Erro ao cadastrar militar!";
-        }
+        }*/
 
     }
 
@@ -170,22 +170,57 @@ class M_militar extends CI_Model {
 
     }
 
-    public function salvarAlteracao($id_militar){
+    public function salvarAlteracao($dadosAlteracao){
+        echo "<pre>";
+       //print_r($dadosAlteracao);
+        echo "</pre>";
+        
+        //insert na tabela alteração
+        $this->db->set('id_militar',$dadosAlteracao['id_militiar']);
+        $this->db->set('id_tipo_alteracao',$dadosAlteracao['id_tipo_alteracao']);
+        $this->db->set('id_om',$dadosAlteracao['id_om']);
+        $this->db->set('boletim',$dadosAlteracao['documento']);
+        $this->db->set('data_inicial',$dadosAlteracao['data_inicial']);
+        $this->db->set('data_final',$dadosAlteracao['data_final']);
+        $this->db->set('observacao',$dadosAlteracao['observacao']);
+        $this->db->set('om_atual','1');
 
-
-
-
-
-
-
-
-
-
-
-
-
+        if ($this->db->insert('alteracao')) {
+            return true;
+        } else {
+            return false;
+        }
 
 
     }
+
+
+    public function consultarAlteracaoMilitar($id_militar){
+
+        $this->db->select('om.nome AS nome_om, alteracao.data_inicial, alteracao.data_final,alteracao.boletim,
+            tipo_alteracao.descricao');
+        $this->db->from('alteracao');
+        $this->db->where('id_militar', $id_militar); 
+        $this->db->join('om', 'alteracao.id_om = om.id_om');
+        $this->db->join('tipo_alteracao', 'alteracao.id_tipo_alteracao = tipo_alteracao.id_tipo_alteracao');
+        $query = $this->db->get();
+
+        return $query;
+    }
+
+    public function ultimaAlteracao($id_militar){
+        $this->db->select_max('om_atual');
+        $this->db->select('om.nome AS nome_om, alteracao.data_inicial, alteracao.data_final,
+            alteracao.boletim,tipo_alteracao.descricao,alteracao.observacao');
+        $this->db->from('alteracao');
+        $this->db->where('id_militar', $id_militar); 
+        $this->db->join('om', 'alteracao.id_om = om.id_om');
+        $this->db->join('tipo_alteracao', 'alteracao.id_tipo_alteracao = tipo_alteracao.id_tipo_alteracao');
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return $query;
+
+    }
+
 
 }

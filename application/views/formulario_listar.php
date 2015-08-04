@@ -1,14 +1,15 @@
 <script type="text/javascript">
 $(document).ready( function () {
-    $('#table_id').DataTable({
+    $('#TabelaMilitares').DataTable({
         "scrollCollapse": true,
-        "paging": false
+        "paging": false,
+        "pagingType": "scrolling"
     });
     new $.fn.dataTable.FixedColumns(table);
 } );
 </script>
 
-<table id="table_id" class="display">
+<table id="TabelaMilitares" class="display">
     <thead>
         <tr>
             <th class='text-center'>Nome</th>

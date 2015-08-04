@@ -72,7 +72,7 @@ $militar = (array) $militar;
               <label class="col-md-5 control-label" for="tipo_alteracao">Tipo de Alteração:</label>
               <div class="col-md-4">
                 <select id="tipo_alteracao" name="tipo_alteracao" class="form-control">
-                  <option></option>
+                  <option>Selecione</option>
                   <?php
                   foreach ($tipoAlteracao -> result() as $tipo) {
                   echo'<option value="' . $tipo->id_tipo_alteracao . '">'. $tipo->descricao . '</option>';
@@ -86,8 +86,8 @@ $militar = (array) $militar;
             <div class="form-group">
               <label class="col-md-5 control-label" for="om">Organiação miltiar:</label>
               <div class="col-md-4">
-                <select id="tipo_alteracao" name="tipo_alteracao" class="form-control">
-                <option></option>
+                <select id="om" name="om" class="form-control">
+                <option>Selecione</option>
                   <?php
                   foreach ($om -> result() as $value) {
                   echo'<option value="' . $value->id_om . '">'. $value->nome . '</option>';
@@ -106,11 +106,11 @@ $militar = (array) $militar;
               </div>
             </div>
 
-            <!-- Text input-->
+            <!-- Data inicial da alteração-->
             <div class="form-group">
-              <label class="col-md-5 control-label" for="data_incio">Data Inicial:</label>  
+              <label class="col-md-5 control-label" for="data">Data Inicial:</label>  
               <div class="col-md-4">
-              <input id="data_incio" name="data_incio" type="text" placeholder="" class="form-control input-md">                
+              <input id="data" name="data" type="text" placeholder="" class="form-control input-md">                
               </div>
             </div>
 
@@ -119,10 +119,12 @@ $militar = (array) $militar;
               <label class="col-md-5 control-label" for="observacao">Observação:</label>  
               <div class="col-md-4">
                 <textarea class="form-control" id="observacao" name="observacao" for="observacao"></textarea>
-
-            
               </div>
             </div>
+
+          <!-- Campo hidden para enviar id_militar-->
+            <input id="documento" name="id_militar" type="hidden" value="<?php echo $militar['informacaoDoMilitar']->id_militar;?>">
+    
 
             <!-- Button (Double) -->
             <div class="form-group">
@@ -181,26 +183,45 @@ $militar = (array) $militar;
     <div class="table-responsive">          
       <table class="table table-bordered table-condensed">
         <tbody>
+          <?php foreach ($ultimaAlteracao-> result() as $registro) { ?>
           <tr>
             <td><b>OM:</b></td>
-            <td><?php //echo $informacaoDaAlteracao[0]->nome_da_om;?></td>
+            <td><?php echo $registro->nome_om;?></td>
           </tr>
           <tr>          
             <td><b>Documento:</b></td>
-            <td><?//php echo $informacaoDaAlteracao[0]->documento;?></td>
+            <td><?php echo $registro->boletim;?></td>
           </tr>
           <tr>
             <td><b>Data inicio:</b></td>
-            <td><?//php echo date("d/m/Y",$informacaoDaAlteracao[0]->data_inicio);?></td>
+            <td><?php echo date("d/m/Y",$registro->data_inicial);?></td>
           </tr>
           <tr>
             <td><b>Data Fim:</b></td>
-            <td>  <?//php echo date("d/m/Y",$informacaoDaAlteracao[0]->data_fim);?></td>
+            <td>  <?php echo date("d/m/Y",$registro->data_final);?></td>
+          </tr>              
+          <tr>
+            <td><b>Estágio:</b></td>
+            <td>  <?php echo $registro->descricao;?></td>
+          </tr>              
+          <tr>
+            <td><b>Observação:</b></td>
+            <td>  <?php echo $registro->observacao;?></td>
           </tr>     
+    <? } ?>
+
+     <!-- 
+     <div class="alert alert-warning text-center" role="alert">
+        <strong>O militar não está vinculado a nenhuma Organização Militar</strong>
+      </div>
+    </div>
+    -->
+
         </tbody>
       </table>
     </div>
-    <!-- Alertas -->
+
+    <!-- Alertas
     <div class="alert alert-success" role="alert">
         <strong>Aviso!</strong> Solicitação de prorrogação de tempo de serviço <strong>RECEBIDA</strong>
     </div>
@@ -210,28 +231,40 @@ $militar = (array) $militar;
     <div class="alert alert-danger" role="alert">
         <strong>Aviso!</strong> Solicitação de prorrogação de tempo de serviço <strong>NÃO RECEBIDA</strong>
     </div>
-    </div>
+    </div> -->
 
 
-  <div class="col-md-12">
    <h2><p class="text-center">Histórico Do Militar</p></h2>
     <div class="table-responsive">          
       <table class="table table-bordered table-condensed">
         <tbody>
-        <?php //foreach ($informacaoDaAlteracao as $key => $value) {?>
-          <tr>
-            <td><b>OM:</b></td>
-            <td><? //echo $informacaoDaAlteracao[$key]->nome_da_om ?></td>
-            <td><b>Data inicio:</b></td>
-            <td><? //echo date("d/m/Y",$informacaoDaAlteracao[$key]->data_inicio) ?></td>
-            <td><b>Data Fim:</b></td>
-            <td><? //echo date("d/m/Y",$informacaoDaAlteracao[$key]->data_fim) ?></td>
-            <td><b>Documento:</b></td>
-            <td><? //echo $informacaoDaAlteracao[$key]->documento ?></td>
-            <td><b>Estágio:</b></td>
-            <td><? //echo $informacaoDaAlteracao[$key]->eis ?></td>
-          </tr>   
-          <? //} ?>
+        <?php 
+        //var_dump($alteracao);
+        
+        if ($alteracao->num_rows > 0) {
+          
+          foreach ($alteracao->result() as $registro) {
+            echo "<tr>";
+            echo "<td><b>OM:</b></td>";
+            echo "<td>"  . $registro->nome_om . "</td>";
+            echo "<td><b>Dt inicio:</b></td>";
+            echo "<td>"  . date('d/m/Y',$registro->data_inicial) . "</td>";
+            echo "<td><b>Dt Fim:</b></td>";
+            echo "<td>" . date('d/m/Y',$registro->data_final) . "</td>";
+            echo "<td><b>Documento:</b></td>";
+            echo "<td>" . $registro->boletim . "</td>";
+            echo "<td><b>Estágio:</b></td>";
+            echo "<td>" . $registro->descricao . "</td>";
+            echo "</tr>";
+          }
+          
+        } else { ?>
+          <div class="col-md-10 col-md-offset-1">
+            <div class="alert alert-warning text-center" role="alert">
+              <strong>Não existe histórico para o militar</strong>
+            </div>
+          </div>
+      <?} ?>
         </tbody>
       </table>
     </div>

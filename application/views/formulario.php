@@ -32,7 +32,7 @@
   <label class="col-md-4 control-label" for="graduacao">Posto / Graduação:</label>  
   <div class="col-md-3">
     <select class="form-control" name="graduacao">
-    <option></option>
+    <option>Selecione</option>
         <?php
               foreach ($graduacao -> result() as $value) {
                 echo'<option value="' . $value->id_graduacao . '">'. $value->descricao . '</option>';
@@ -47,7 +47,7 @@
   <label class="col-md-4 control-label" for="arma">Arma / Quadro / Serviço:</label>  
   <div class="col-md-3">
     <select class="form-control" name="arma">
-    <option></option>
+    <option>Selecione</option>
         <?php
               foreach ($arma -> result() as $value) {
                 echo'<option value="' . $value->id_arma . '">'. $value->descricao . '</option>';
@@ -62,7 +62,7 @@
   <label class="col-md-4 control-label" for="tipo_servico">Tipo de serviço:</label>  
   <div class="col-md-4">
     <select class="form-control" name="tipo_servico">
-    <option></option>
+    <option>Selecione</option>
       <?php
         foreach ($tipoMilitar -> result() as $value) {
           echo'<option value="' . $value->id_tipo_militar . '">'. $value->cod_tipo_militar . " - " . $value->descricao_tipo_militar .'</option>';
@@ -75,7 +75,7 @@
   <label class="col-md-4 control-label" for="especialidade">Especialidade:</label>  
   <div class="col-md-4">
     <select class="form-control" name="especialidade">
-    <option></option>
+    <option>Selecione</option>
       <?php
         foreach ($especialidade -> result() as $value) {
           echo'<option value="' . $value->id_especialidade . '">'. $value->cod_especialidade . " -- " . $value->descricao .'</option>';

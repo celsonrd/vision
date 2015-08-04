@@ -9,7 +9,7 @@ class Militar extends CI_Controller {
 
         function retiraAcentos($string){
     	
-    	$map =  array (
+    		$map =  array (
     		        'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A',
             		'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
             		'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ð' => 'D', 'Ñ' => 'N',
@@ -24,12 +24,12 @@ class Militar extends CI_Controller {
         			);
 
         
-        $string = strtr($string,$map);
-        $string = strtoupper($string);
+       		$string = strtr($string,$map);
+        	$string = strtoupper($string);
  
-    return $string;
+    	return $string;
 
-	}
+		}
 
     }
 
@@ -66,7 +66,7 @@ class Militar extends CI_Controller {
 		$data['especialidade'] 		= $this->m_especialidade->getEspecialidade();
 		
 		// Código antigo
-		//$data['especialidade'] 		= $this->m_especialidade->getEspecialidade();
+		//$data['especialidade'] 	= $this->m_especialidade->getEspecialidade();
 		//$data['om'] 				= $this->m_om->getOm();
     	//$data['dataSession'] 		= $this->session->userdata('usuario');
 
@@ -192,7 +192,8 @@ class Militar extends CI_Controller {
 
 
 		if ($this->m_militar->salvarMilitar($dadosFormulario)) {
-			echo "Sucesso";
+			$this->load->view('header');
+			$this->load->view('sucesso');
 		} else{
 			echo "erro";
 		}	
@@ -226,7 +227,7 @@ class Militar extends CI_Controller {
 	}
 
 
-		public function exibirAlteracao($id_militar){
+	public function exibirAlteracao($id_militar){
 
 		$this->load->view('header');
 		$this->load->view('nav');
@@ -238,9 +239,11 @@ class Militar extends CI_Controller {
 		}
 
 
-		$dados['militar'] 		= $this->m_militar->exibirAlteracao($id_militar);
-		$dados['tipoAlteracao'] = $this->m_tipo_alteracao->getTipoAlteracao();
-		$dados['om']			= $this->m_om->getOm();
+		$dados['militar'] 			= $this->m_militar->exibirAlteracao($id_militar);
+		$dados['tipoAlteracao'] 	= $this->m_tipo_alteracao->getTipoAlteracao();
+		$dados['om']				= $this->m_om->getOm();
+		$dados['alteracao']			= $this->m_militar->consultarAlteracaoMilitar($id_militar);
+		$dados['ultimaAlteracao']	= $this->m_militar->ultimaAlteracao($id_militar);
 
 		// Converter o objeto recebido pela consulta do banco no array para manipulação
 		//$dataIncorporacao = get_object_vars($dados['dataIncorporacao']);
@@ -255,19 +258,48 @@ class Militar extends CI_Controller {
 	public function salvarAlteracao(){
 
 		$dadosAlteracao = array(
-		"id_miltiar"		=> $this->input->post("id_militar"),
+		"id_militiar"		=> $this->input->post("id_militar"),
 		"id_tipo_alteracao"	=> $this->input->post("tipo_alteracao"),
 		"id_om" 			=> $this->input->post("om"),
 		"documento" 		=> $this->input->post("documento"),
-		"data_inicial" 		=> $this->input->post("data_incio"),
+		"data_inicial" 		=> $this->input->post("data"),
 		"observacao" 		=> $this->input->post("observacao"),
 		);
-
+		
 		$dadosAlteracao['data_inicial'] = strtotime(implode("-",array_reverse(explode("/", $dadosAlteracao['data_inicial']))));
-		var_dump($dadosAlteracao);
+		
+		$objDataInicial = new DateTime();
+		$objDataFinal = new DateTime();
+
+		$objDataInicial->setTimestamp($dadosAlteracao['data_inicial']);
 
 
+		switch ($dadosAlteracao['id_tipo_alteracao']) {
+    		case 1:
+    		// EIPOT
+        		$objDataFinal = $objDataInicial->modify('+ 30 days');
+        		
+        	break;
+    		case 2:
+        		echo "eic";
+        	break;
+    		case 3:
+        		echo "eas";
+        	break;
+		}
 
+		// Converter o objeto em timestamp para persistencia
+		$dadosAlteracao['data_final'] = $objDataFinal->getTimestamp();
+
+		if ($this->m_militar->salvarAlteracao($dadosAlteracao)) {
+			echo "Sucesso";
+
+			} else {
+			echo "Erro";
+		}
+
+
+		//select max(id_alteracao), data_inicial, data_final, boletim, observacao, om_atual, id_om, id_tipo_alteracao, id_militar from alteracao where om_atual = 1;
 
 
 
